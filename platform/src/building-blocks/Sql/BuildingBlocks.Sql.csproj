@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Dapper"/>
+        <PackageReference Include="Microsoft.Data.SqlClient"/>
+        <!-- SqlClient 7.0 moved the Entra providers out of the driver, so a connection string naming
+             Active Directory Default has nowhere to get a token without this package present. -->
+        <PackageReference Include="Microsoft.Data.SqlClient.Extensions.Azure"/>
+    </ItemGroup>
+
+</Project>

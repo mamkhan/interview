@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Using Include="Aspire.Hosting"/>
+        <Using Include="Aspire.Hosting.ApplicationModel"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting"/>
+        <PackageReference Include="Aspire.Hosting.Azure.ServiceBus"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\..\platform\src\LocalGraph\Platform.LocalGraph\Platform.LocalGraph.csproj"/>
+        <ProjectReference Include="..\..\Contracts\Growth.Contracts\Growth.Contracts.csproj"/>
+    </ItemGroup>
+
+</Project>

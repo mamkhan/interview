@@ -1,0 +1,3 @@
+# Forecast publishes each stored version with the forecast id as message id and announces a version it finds already
+# stored again under that id, so duplicate detection discards the repeat. Billing & Pay owns its own subscription.
+requires_duplicate_detection: true

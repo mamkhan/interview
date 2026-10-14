@@ -1,0 +1,5 @@
+# Sealed market messages. The write-once window is the time during which nothing can delete or overwrite a sealed
+# file, not a deletion schedule: sealed messages are kept forever and tier down instead. Production's window is set
+# with compliance; dev keeps a day so a scratch environment can still be torn down.
+account: archive
+retention_days: 1

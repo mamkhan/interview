@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Azure.Messaging.ServiceBus"/>
+        <PackageReference Include="Azure.Storage.Blobs"/>
+        <PackageReference Include="Microsoft.Data.SqlClient"/>
+        <PackageReference Include="Testcontainers.Azurite"/>
+        <PackageReference Include="Testcontainers.MsSql"/>
+        <PackageReference Include="Testcontainers.ServiceBus"/>
+        <PackageReference Include="xunit.v3.extensibility.core"/>
+    </ItemGroup>
+
+</Project>

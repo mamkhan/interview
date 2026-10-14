@@ -1,0 +1,13 @@
+<ieXMLDocument>
+  <MessageHeader MessageTypeCode="310" VersionNumber="14.00.00" MarketTimestamp="2026-10-01T19:32:06.581Z" SenderID="DSO" RecipientID="S22" TxRefNbr="0000000790000310" />
+  <MIM310_ValidatedCoSReading MPRN="10900000310" NetworksReferenceNumber="019000000310" MeterPointStatusCode="E" LoadProfileCode="25" DUOS_Group="DG1" ReadDate="2026-09-28">
+    <UsageFactors TimeslotCode="01D" EffectiveFromDate="2026-09-04" ActualUsageFactor="1331.76627221" />
+    <UsageFactors TimeslotCode="01N" EffectiveFromDate="2026-09-04" ActualUsageFactor="709.1223106" />
+    <UsageFactors TimeslotCode="01P" EffectiveFromDate="2026-09-04" ActualUsageFactor="259.43498585" />
+    <MeterID MeterCategoryCode="RM107" SerialNumber="90003101">
+      <RegisterLevelInfo MeterRegisterSequence="001" TimeslotCode="01D" UOM_Code="KWH" MeterMultiplier="1" ReadingValue="909" ReadReasonCode="26" ReadTypeCode="A" PreviousReadDate="2026-09-03" Consumption="77" ReadStatusCode="RV" RegisterTypeCode="78" />
+      <RegisterLevelInfo MeterRegisterSequence="002" TimeslotCode="01N" UOM_Code="KWH" MeterMultiplier="1" ReadingValue="791" ReadReasonCode="26" ReadTypeCode="A" PreviousReadDate="2026-09-03" Consumption="41" ReadStatusCode="RV" RegisterTypeCode="79" />
+      <RegisterLevelInfo MeterRegisterSequence="003" TimeslotCode="01P" UOM_Code="KWH" MeterMultiplier="1" ReadingValue="173" ReadReasonCode="26" ReadTypeCode="A" PreviousReadDate="2026-09-03" Consumption="15" ReadStatusCode="RV" RegisterTypeCode="80" />
+    </MeterID>
+  </MIM310_ValidatedCoSReading>
+</ieXMLDocument>

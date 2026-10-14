@@ -1,0 +1,14 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.4.5">
+
+    <ItemGroup>
+        <ProjectReference Include="..\Hosts\MarketMessaging.Receiver\MarketMessaging.Receiver.csproj"/>
+        <ProjectReference Include="..\Hosts\MeteringConsumption.Host\MeteringConsumption.Host.csproj"/>
+        <ProjectReference Include="..\..\..\..\platform\src\LocalGraph\LocalBlobEvents\LocalBlobEvents.csproj"/>
+        <ProjectReference Include="..\LocalGraph\MeteringConsumption.LocalGraph\MeteringConsumption.LocalGraph.csproj" IsAspireProjectResource="false"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+</Project>

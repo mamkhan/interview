@@ -1,0 +1,17 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.4.5">
+
+    <!-- Every domain's hosts, and every domain's LocalGraph: this is the whole platform running locally. -->
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\domains\growth\src\LocalGraph\Growth.LocalGraph\Growth.LocalGraph.csproj" IsAspireProjectResource="false"/>
+        <ProjectReference Include="..\..\..\domains\metering-consumption\src\Hosts\MarketMessaging.Receiver\MarketMessaging.Receiver.csproj"/>
+        <ProjectReference Include="..\..\..\domains\metering-consumption\src\Hosts\MeteringConsumption.Host\MeteringConsumption.Host.csproj"/>
+        <ProjectReference Include="..\..\..\domains\metering-consumption\src\LocalGraph\MeteringConsumption.LocalGraph\MeteringConsumption.LocalGraph.csproj" IsAspireProjectResource="false"/>
+        <ProjectReference Include="..\LocalGraph\LocalBlobEvents\LocalBlobEvents.csproj"/>
+        <ProjectReference Include="..\LocalGraph\Platform.LocalGraph\Platform.LocalGraph.csproj" IsAspireProjectResource="false"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+
+</Project>

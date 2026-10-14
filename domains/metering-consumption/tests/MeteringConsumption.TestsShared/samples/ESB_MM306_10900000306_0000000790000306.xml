@@ -1,0 +1,10 @@
+<ieXMLDocument>
+  <MessageHeader MessageTypeCode="306" VersionNumber="14.00.00" MarketTimestamp="2026-10-01T15:18:28.366Z" SenderID="DSO" RecipientID="S22" TxRefNbr="0000000790000306" />
+  <MIM306_MeterPointStatusChangeDeEnergisationRead MPRN="10900000306" MPBusinessReference="017_S22_M3_2026093000000000306" NetworksReferenceNumber="019000000306" MeterPointStatusCode="DR" LoadProfileCode="03" DUOS_Group="DG2" EffectiveFromDate="2026-09-30">
+    <UsageFactors TimeslotCode="24H" EffectiveFromDate="2026-10-01" EstimatedUsageFactor="0" />
+    <UsageFactors TimeslotCode="24H" EffectiveFromDate="2026-08-15" ActualUsageFactor="2803.66425481" />
+    <MeterID MeterCategoryCode="RM106" SerialNumber="90003061">
+      <RegisterLevelInfo MeterRegisterSequence="001" TimeslotCode="24H" UOM_Code="KWH" MeterMultiplier="1" ReadingValue="37639" ReadReasonCode="13" ReadTypeCode="A" PreviousReadDate="2026-08-14" Consumption="323" ReadStatusCode="RV" RegisterTypeCode="01" />
+    </MeterID>
+  </MIM306_MeterPointStatusChangeDeEnergisationRead>
+</ieXMLDocument>

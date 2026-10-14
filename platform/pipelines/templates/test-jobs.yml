@@ -1,0 +1,111 @@
+# The test tiers of ADR-007 that run before a deploy, shared by every pipeline so a pipeline's Test stage is
+# configuration rather than invention (ADR-002): style, architecture and unit tests in one job, the integration
+# tier on the shared container stack in the other, run in parallel. The acceptance tier runs after the deploy,
+# against the deployed environment. The integration job needs Docker, which the hosted Ubuntu agents provide.
+# Every path is relative to the repository root, where global.json pins the SDK.
+parameters:
+  # The solution this pipeline builds: the root AcmePlatform.slnx or a domain's <Domain>.slnx. It holds every
+  # test project under testRoot.
+  - name: solution
+    type: string
+  # The folder whose test projects this pipeline runs, and only those, so a push runs each test once:
+  # `domains/<domain>/tests` for a domain pipeline, `platform/src/tests` for the platform's. One project per
+  # tier, so `*.UnitTests` is the unit tier and `*.IntegrationTests` the container tier; the two globs are
+  # disjoint and neither matches `*.AcceptanceTests` or `*.TestsShared`.
+  - name: testRoot
+    type: string
+
+jobs:
+  - job: StyleArchitectureUnit
+    displayName: Style, architecture and unit tests
+    steps:
+      - task: UseDotNet@2
+        displayName: Install .NET SDK (global.json)
+        inputs:
+          useGlobalJson: true
+
+      - script: |
+          set -e
+          dotnet format ${{ parameters.solution }} style --verify-no-changes
+        displayName: Verify code style
+
+      - script: |
+          set -e
+          dotnet build ${{ parameters.solution }} -c Release
+          RESULTS="$(Agent.TempDirectory)/results"
+          # The isolation rules read every csproj on disk, so they guard a domain pipeline as much as
+          # the platform's; the project is built here because a domain solution does not carry it.
+          dotnet test platform/src/architecture-tests/ArchitectureTests -c Release --logger trx --results-directory "$RESULTS"
+          shopt -s nullglob
+          # nullglob turns a naming slip into an empty loop, which would pass having run nothing.
+          projects=(${{ parameters.testRoot }}/*.UnitTests)
+          if [ ${#projects[@]} -eq 0 ]; then
+            echo "##vso[task.logissue type=error]No unit test projects matched."
+            exit 1
+          fi
+          for proj in "${projects[@]}"; do
+            name="${proj##*/}"
+            dotnet test "$proj" -c Release --no-build --logger "trx;LogFileName=$name.trx" --results-directory "$RESULTS"
+            # A project the solution does not build runs nothing under --no-build and still exits 0.
+            if [ ! -f "$RESULTS/$name.trx" ]; then
+              echo "##vso[task.logissue type=error]$name produced no results; is it in ${{ parameters.solution }}?"
+              exit 1
+            fi
+          done
+        displayName: Architecture and unit tests
+
+      - task: PublishTestResults@2
+        displayName: Publish results
+        condition: always()
+        inputs:
+          testResultsFormat: VSTest
+          testResultsFiles: '$(Agent.TempDirectory)/results/*.trx'
+          testRunTitle: Architecture and unit tests
+
+  - job: IntegrationTests
+    displayName: Integration tests (shared container stack)
+    timeoutInMinutes: 30
+    steps:
+      - task: UseDotNet@2
+        displayName: Install .NET SDK (global.json)
+        inputs:
+          useGlobalJson: true
+
+      - script: |
+          set -e
+          # Pull the container images while the build runs so the costs land in parallel.
+          docker pull -q mcr.microsoft.com/mssql/server:2022-latest &
+          docker pull -q mcr.microsoft.com/azure-messaging/servicebus-emulator:2.0.0 &
+          docker pull -q mcr.microsoft.com/azure-storage/azurite:3.35.0 &
+          dotnet build ${{ parameters.solution }} -c Release
+          wait
+        displayName: Build once, pull images concurrently
+
+      - script: |
+          set -e
+          shopt -s nullglob
+          RESULTS="$(Agent.TempDirectory)/results"
+          # nullglob turns a naming slip into an empty loop, which would pass having run nothing.
+          projects=(${{ parameters.testRoot }}/*.IntegrationTests)
+          if [ ${#projects[@]} -eq 0 ]; then
+            echo "##vso[task.logissue type=error]No integration test projects matched."
+            exit 1
+          fi
+          for proj in "${projects[@]}"; do
+            name="${proj##*/}"
+            dotnet test "$proj" -c Release --no-build --logger "trx;LogFileName=$name.trx" --results-directory "$RESULTS"
+            # A project the solution does not build runs nothing under --no-build and still exits 0.
+            if [ ! -f "$RESULTS/$name.trx" ]; then
+              echo "##vso[task.logissue type=error]$name produced no results; is it in ${{ parameters.solution }}?"
+              exit 1
+            fi
+          done
+        displayName: Run integration tests
+
+      - task: PublishTestResults@2
+        displayName: Publish results
+        condition: always()
+        inputs:
+          testResultsFormat: VSTest
+          testResultsFiles: '$(Agent.TempDirectory)/results/*.trx'
+          testRunTitle: Integration tests

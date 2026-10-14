@@ -1,0 +1,4 @@
+# No immutability window: the receiver deletes the blob once it is sealed in the archive, and a write-once policy
+# here would make that delete impossible and the file arrive forever.
+account: archive
+retention_days: 0

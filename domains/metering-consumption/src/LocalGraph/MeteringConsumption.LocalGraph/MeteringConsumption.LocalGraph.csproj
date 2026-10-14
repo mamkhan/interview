@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Using Include="Aspire.Hosting"/>
+        <Using Include="Aspire.Hosting.ApplicationModel"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting"/>
+        <PackageReference Include="Aspire.Hosting.Azure.ServiceBus"/>
+        <PackageReference Include="Aspire.Hosting.Azure.Sql"/>
+        <PackageReference Include="Aspire.Hosting.Azure.Storage"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\..\platform\src\LocalGraph\Platform.LocalGraph\Platform.LocalGraph.csproj"/>
+        <ProjectReference Include="..\..\..\..\growth\src\LocalGraph\Growth.LocalGraph\Growth.LocalGraph.csproj"/>
+        <ProjectReference Include="..\..\Contracts\MeteringConsumption.Contracts\MeteringConsumption.Contracts.csproj" />
+        <ProjectReference Include="..\..\Modules\Consumption\MeteringConsumption.Consumption.csproj"/>
+        <ProjectReference Include="..\..\Modules\MarketMessaging\MeteringConsumption.MarketMessaging.csproj"/>
+        <ProjectReference Include="..\..\Modules\SupplyPoints\MeteringConsumption.SupplyPoints.csproj"/>
+    </ItemGroup>
+
+</Project>

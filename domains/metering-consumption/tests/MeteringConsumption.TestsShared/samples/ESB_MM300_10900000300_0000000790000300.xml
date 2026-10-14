@@ -1,0 +1,15 @@
+<ieXMLDocument>
+  <MessageHeader MessageTypeCode="300" VersionNumber="14.00.00" MarketTimestamp="2026-10-01T13:49:46.228Z" SenderID="DSO" RecipientID="S22" TxRefNbr="0000000790000300" />
+  <MIM300_ValidatedNonIntervalReadingsScheduled MPRN="10900000300" NetworksReferenceNumber="019000000300" LoadProfileCode="01" DUOS_Group="DG1" MeterPointStatusCode="E" ReadDate="2026-09-30">
+    <UsageFactors TimeslotCode="00N" EffectiveFromDate="2026-09-30" EstimatedUsageFactor="0" />
+    <UsageFactors TimeslotCode="24H" EffectiveFromDate="2026-09-30" EstimatedUsageFactor="1751.17679457" />
+    <UsageFactors TimeslotCode="00N" EffectiveFromDate="2026-02-27" ActualUsageFactor="0" />
+    <UsageFactors TimeslotCode="24H" EffectiveFromDate="2026-02-27" ActualUsageFactor="355.75636533" />
+    <MeterID MeterCategoryCode="RM005" SerialNumber="90003001">
+      <RegisterLevelInfo MeterRegisterSequence="001" TimeslotCode="24H" UOM_Code="KWH" MeterMultiplier="1" ReadingValue="26788" ReadReasonCode="10" ReadTypeCode="CU" PreviousReadDate="2026-08-13" Consumption="42" ReadStatusCode="RREL" RegisterTypeCode="01" />
+    </MeterID>
+    <MeterID MeterCategoryCode="RM021" SerialNumber="90003002">
+      <RegisterLevelInfo MeterRegisterSequence="001" TimeslotCode="00N" UOM_Code="KWH" MeterMultiplier="1" ReadingValue="48795" ReadReasonCode="10" ReadTypeCode="EF" PreviousReadDate="2026-08-13" Consumption="0" ReadStatusCode="REST" RegisterTypeCode="04" />
+    </MeterID>
+  </MIM300_ValidatedNonIntervalReadingsScheduled>
+</ieXMLDocument>

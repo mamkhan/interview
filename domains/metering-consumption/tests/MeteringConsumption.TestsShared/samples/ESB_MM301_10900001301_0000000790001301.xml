@@ -1,0 +1,6 @@
+<ieXMLDocument>
+  <MessageHeader MessageTypeCode="301" VersionNumber="14.00.00" MarketTimestamp="2026-10-01T15:14:05.066Z" SenderID="DSO" RecipientID="S22" TxRefNbr="0000000790001301" />
+  <MIM301_MeterPointCharacteristics MPRN="10900001301" DLF_Code="LV" ConnectionSystemCode="DSO_GRID" MaximumImportCapacity="12" MaximumExportCapacity="5" MeterConfigurationCode="MCC12" DUOS_Group="DG1" EffectiveFromDate="2026-10-01">
+    <MeterPointAddress HouseNo="1" Street="MAIN STREET" AddrLine4="CHURCH LANE" City="TESTTOWN" CountyIreland="KE" Country="IE" />
+  </MIM301_MeterPointCharacteristics>
+</ieXMLDocument>

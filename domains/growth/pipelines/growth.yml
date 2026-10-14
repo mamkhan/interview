@@ -1,0 +1,61 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - domains/growth
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  # A domain-owned connection replaces the rail's when one exists.
+  - name: azureServiceConnection
+    value: meteringrail-azure
+
+stages:
+  # Growth holds contracts and a local graph only, so it has no test tiers of its own: its events are
+  # pinned by their consumers' payload tests and proven end to end by their acceptance suites.
+  - stage: Test
+    displayName: Build and architecture tests
+    jobs:
+      - job: Build
+        displayName: Build and architecture tests
+        steps:
+          - task: UseDotNet@2
+            displayName: Install .NET SDK (global.json)
+            inputs:
+              useGlobalJson: true
+
+          - script: |
+              set -e
+              dotnet build domains/growth/Growth.slnx -c Release
+              dotnet test platform/src/architecture-tests/ArchitectureTests -c Release
+            displayName: Build and architecture tests
+
+  - stage: InfrastructureDev
+    displayName: Growth infrastructure (dev)
+    dependsOn: Test
+    condition: |
+      and(succeeded(),
+          eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - template: /platform/pipelines/templates/platform-stack-job.yml
+        parameters:
+          environment: dev
+          azureServiceConnection: $(azureServiceConnection)
+          deploymentEnvironment: acme-dev-growth
+          unitsPath: domains/growth/infrastructure/units
+
+  # - stage: InfrastructurePrd
+  #   displayName: Growth infrastructure (production)
+  #   dependsOn: InfrastructureDev
+  #   condition: succeeded()
+  #   jobs:
+  #     - template: /platform/pipelines/templates/platform-stack-job.yml
+  #       parameters:
+  #         environment: prd
+  #         azureServiceConnection: $(azureServiceConnection)
+  #         deploymentEnvironment: acme-prd-growth
+  #         unitsPath: domains/growth/infrastructure/units

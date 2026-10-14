@@ -1,0 +1,57 @@
+# The platform's own code, infrastructure and build baseline and the platform contracts.
+# A domain's code runs in its own pipeline, which a building-block change also starts.
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - platform
+      - domains/metering-consumption/src/Contracts
+      - domains/growth/src/Contracts
+      - global.json
+      - Directory.Build.props
+      - Directory.Packages.props
+      - BannedSymbols.txt
+      - AcmePlatform.slnx
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  # A platform-owned connection replaces the rail's when one exists.
+  - name: azureServiceConnection
+    value: meteringrail-azure
+
+stages:
+  - stage: Test
+    displayName: Build and test
+    jobs:
+      - template: templates/test-jobs.yml
+        parameters:
+          solution: AcmePlatform.slnx
+          testRoot: platform/src/tests
+
+  - stage: PlatformDev
+    displayName: Shared infrastructure (dev)
+    dependsOn: Test
+    condition: |
+      and(succeeded(),
+          eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - template: templates/platform-stack-job.yml
+        parameters:
+          environment: dev
+          azureServiceConnection: $(azureServiceConnection)
+          deploymentEnvironment: acme-dev-platform
+
+  # - stage: PlatformPrd
+  #   displayName: Shared infrastructure (production)
+  #   dependsOn: PlatformDev
+  #   condition: succeeded()
+  #   jobs:
+  #     - template: templates/platform-stack-job.yml
+  #       parameters:
+  #         environment: prd
+  #         azureServiceConnection: $(azureServiceConnection)
+  #         deploymentEnvironment: acme-prd-platform

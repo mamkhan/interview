@@ -1,0 +1,3 @@
+# Session-enabled because Profile reads and then writes a supply point's row, and its ordering key is the MPRN.
+topic: metr.usage-factors-received
+requires_session: true

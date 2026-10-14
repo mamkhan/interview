@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Dapper"/>
+        <PackageReference Include="Microsoft.Data.SqlClient"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Messaging\BuildingBlocks.Messaging.csproj"/>
+        <ProjectReference Include="..\Sql\BuildingBlocks.Sql.csproj"/>
+    </ItemGroup>
+
+</Project>

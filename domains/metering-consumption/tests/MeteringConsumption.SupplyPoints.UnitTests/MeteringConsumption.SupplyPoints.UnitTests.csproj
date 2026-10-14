@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <RootNamespace>MeteringConsumption.SupplyPoints.UnitTests</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AwesomeAssertions"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="xunit.runner.visualstudio"/>
+        <PackageReference Include="xunit.v3"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+        <Using Include="MeteringConsumption.TestsShared"/>
+    </ItemGroup>
+
+    <!-- The unit tier: hand-written fakes and no I/O, which is why the container fixtures are absent
+         rather than merely unused. Microsoft.Extensions.Hosting is here for Composition/, whose
+         Host.CreateEmptyApplicationBuilder the module does not carry. -->
+    <ItemGroup>
+        <ProjectReference Include="..\MeteringConsumption.TestsShared\MeteringConsumption.TestsShared.csproj"/>
+        <ProjectReference Include="..\..\src\Modules\SupplyPoints\MeteringConsumption.SupplyPoints.csproj"/>
+    </ItemGroup>
+
+</Project>

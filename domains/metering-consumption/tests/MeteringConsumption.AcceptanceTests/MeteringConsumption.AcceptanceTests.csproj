@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <RootNamespace>MeteringConsumption.AcceptanceTests</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AwesomeAssertions"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="xunit.runner.visualstudio"/>
+        <PackageReference Include="xunit.v3"/>
+        <PackageReference Include="Azure.Identity"/>
+        <PackageReference Include="Azure.Messaging.ServiceBus"/>
+        <PackageReference Include="Azure.Storage.Blobs"/>
+        <PackageReference Include="Dapper"/>
+        <PackageReference Include="Microsoft.Data.SqlClient"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+        <Using Include="MeteringConsumption.TestsShared"/>
+    </ItemGroup>
+
+    <!-- The running-environment tier. It starts nothing: everything it asserts has to be true of an environment
+         already up, deployed or local, so its only inputs are which environment and the names and local ports
+         both sides agree on. -->
+    <ItemGroup>
+        <ProjectReference Include="..\MeteringConsumption.TestsShared\MeteringConsumption.TestsShared.csproj"/>
+        <ProjectReference Include="..\..\src\Contracts\MeteringConsumption.Contracts\MeteringConsumption.Contracts.csproj" />
+        <ProjectReference Include="..\..\src\Modules\MarketMessaging\MeteringConsumption.MarketMessaging.csproj"/>
+        <ProjectReference Include="..\..\src\Modules\SupplyPoints\MeteringConsumption.SupplyPoints.csproj"/>
+        <ProjectReference Include="..\..\src\LocalGraph\MeteringConsumption.LocalGraph\MeteringConsumption.LocalGraph.csproj"/>
+    </ItemGroup>
+
+</Project>

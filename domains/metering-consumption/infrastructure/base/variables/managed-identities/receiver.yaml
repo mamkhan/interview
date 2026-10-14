@@ -1,0 +1,9 @@
+# A second identity rather than a share of the host's: this one reads and deletes in the drop container and holds
+# no database user, which is the security boundary the two-host cut exists for.
+service: market-messaging-receiver
+roles:
+  - { role: Azure Service Bus Data Sender, scope: service_bus }
+  - { role: Azure Service Bus Data Receiver, scope: service_bus }
+  - { role: Storage Blob Data Contributor, scope: storage_accounts.archive }
+  - { role: AcrPull, scope: container_registry }
+  - { role: Key Vault Secrets User, scope: key_vault }

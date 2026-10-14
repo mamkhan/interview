@@ -1,0 +1,2 @@
+# Event Grid announces each blob written to the drop container here, and the receiver reads it.
+{}

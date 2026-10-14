@@ -1,0 +1,43 @@
+<Solution>
+  <Folder Name="/platform/">
+    <Project Path="../../platform/src/LocalGraph/Platform.LocalGraph/Platform.LocalGraph.csproj" />
+  </Folder>
+  <Folder Name="/platform/building-blocks/">
+    <Project Path="../../platform/src/building-blocks/Commands/BuildingBlocks.Commands.csproj" />
+    <Project Path="../../platform/src/building-blocks/Messaging/BuildingBlocks.Messaging.csproj" />
+    <Project Path="../../platform/src/building-blocks/Outbox/BuildingBlocks.Outbox.csproj" />
+    <Project Path="../../platform/src/building-blocks/Persistence/BuildingBlocks.Persistence.csproj" />
+    <Project Path="../../platform/src/building-blocks/Seedwork/BuildingBlocks.Seedwork.csproj" />
+    <Project Path="../../platform/src/building-blocks/ServiceDefaults/ServiceDefaults.csproj" />
+    <Project Path="../../platform/src/building-blocks/Sql/BuildingBlocks.Sql.csproj" />
+    <Project Path="../../platform/src/building-blocks/TestsShared/BuildingBlocks.TestsShared.csproj" />
+  </Folder>
+  <Folder Name="/contracts/">
+    <Project Path="src/Contracts/Growth.Contracts/Growth.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/infrastructure/">
+    <File Path="infrastructure/layer.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/base/" />
+  <Folder Name="/infrastructure/base/variables/" />
+  <Folder Name="/infrastructure/base/variables/servicebus-topics/">
+    <File Path="infrastructure/base/variables/servicebus-topics/grow.tariff-resolved.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/dev/">
+    <File Path="infrastructure/dev/env.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/prd/">
+    <File Path="infrastructure/prd/env.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/tst/">
+    <File Path="infrastructure/tst/env.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/" />
+  <Folder Name="/infrastructure/units/servicebus-topics/">
+    <File Path="infrastructure/units/servicebus-topics/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/pipelines/">
+    <File Path="pipelines/growth.yml" />
+  </Folder>
+  <Project Path="src/LocalGraph/Growth.LocalGraph/Growth.LocalGraph.csproj" />
+</Solution>

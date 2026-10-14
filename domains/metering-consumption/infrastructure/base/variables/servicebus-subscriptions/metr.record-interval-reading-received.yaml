@@ -1,0 +1,4 @@
+# Session-enabled because Record reads a meter-day and then appends to it, and its ordering key is the supply
+# point.
+topic: metr.interval-reading-received
+requires_session: true

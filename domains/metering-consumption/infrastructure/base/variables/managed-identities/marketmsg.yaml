@@ -1,0 +1,8 @@
+service: metering-consumption-host
+roles:
+  - { role: Azure Service Bus Data Sender, scope: service_bus }
+  - { role: Azure Service Bus Data Receiver, scope: service_bus }
+  - { role: Storage Blob Data Contributor, scope: storage_accounts.archive }
+  - { role: Storage Blob Data Contributor, scope: storage_accounts.ledger }
+  - { role: AcrPull, scope: container_registry }
+  - { role: Key Vault Secrets User, scope: key_vault }

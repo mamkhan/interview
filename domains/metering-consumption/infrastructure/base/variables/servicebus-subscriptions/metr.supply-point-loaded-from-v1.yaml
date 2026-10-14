@@ -1,0 +1,5 @@
+# SupplyPoints' Reload, on the platform's topic, which the platform pipeline creates first. Named for the event with
+# this domain's code. No sessions: a run sends one event per supply point, and the supply point's row lock orders a
+# reload against Store's messages.
+topic: plat.supply-point-loaded-from-v1
+requires_session: false

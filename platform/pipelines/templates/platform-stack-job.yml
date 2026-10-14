@@ -1,0 +1,75 @@
+parameters:
+  - name: environment
+    type: string
+  - name: azureServiceConnection
+    type: string
+  - name: deploymentEnvironment
+    type: string
+  # The per-type units to apply, each serving the environment named above; empty means the platform layer's. A
+  # domain with infrastructure and no hosts (Growth) applies its units through this job too.
+  - name: unitsPath
+    type: string
+    default: ''
+
+jobs:
+  - deployment: Apply
+    displayName: Terragrunt plan, apply and drift check
+    timeoutInMinutes: 45
+    # An environment named here must exist in Azure DevOps even when it carries no check: a missing one
+    # fails the whole run at initialization, before any stage executes.
+    environment: ${{ parameters.deploymentEnvironment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+
+            - template: iac-steps.yml
+
+            - task: AzureCLI@2
+              displayName: Plan the stack
+              inputs:
+                azureSubscription: ${{ parameters.azureServiceConnection }}
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  set -e
+                  export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+                  export TG_NON_INTERACTIVE=true
+                  export ACME_ENVIRONMENT=${{ parameters.environment }}
+                  cd ${{ coalesce(parameters.unitsPath, 'platform/infrastructure/units') }}
+                  terragrunt run --all plan -- -lock-timeout=120s
+
+            - task: AzureCLI@2
+              displayName: Apply the stack
+              inputs:
+                azureSubscription: ${{ parameters.azureServiceConnection }}
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  set -e
+                  export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+                  export TG_NON_INTERACTIVE=true
+                  export ACME_ENVIRONMENT=${{ parameters.environment }}
+                  cd ${{ coalesce(parameters.unitsPath, 'platform/infrastructure/units') }}
+                  terragrunt run --all apply -- -lock-timeout=120s
+
+            - task: AzureCLI@2
+              displayName: Drift check (plan must be clean)
+              inputs:
+                azureSubscription: ${{ parameters.azureServiceConnection }}
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  set -e
+                  export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+                  export TG_NON_INTERACTIVE=true
+                  export ACME_ENVIRONMENT=${{ parameters.environment }}
+                  cd ${{ coalesce(parameters.unitsPath, 'platform/infrastructure/units') }}
+                  terragrunt run --all plan -- -lock-timeout=120s 2>&1 | tee /tmp/plan.log
+                  if grep -E "Plan: [0-9]+ to add|to change|to destroy" /tmp/plan.log | grep -vq "Plan: 0 to add, 0 to change, 0 to destroy"; then
+                    echo "##[error]The stack has drift after apply:"
+                    cat /tmp/plan.log
+                    exit 1
+                  fi
+                  echo "No drift."

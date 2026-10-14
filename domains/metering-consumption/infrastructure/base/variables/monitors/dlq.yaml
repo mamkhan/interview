@@ -1,0 +1,12 @@
+# The dead-letter alert on the topics the host consumes, and its operations workbook. The workbook's resource name is
+# derived from `workbook`, so changing it replaces the workbook.
+service: metering-consumption-host
+workbook: marketmsg
+topics:
+  - metr.market-message-received
+  - metr.meter-configuration-received
+  - metr.usage-factors-received
+  - metr.meter-configuration-change-received
+  - metr.consumption-recorded
+  - grow.tariff-resolved
+  - plat.supply-point-loaded-from-v1

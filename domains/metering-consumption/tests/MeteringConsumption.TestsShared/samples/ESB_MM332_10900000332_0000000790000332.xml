@@ -1,0 +1,13 @@
+<ieXMLDocument>
+  <MessageHeader MessageTypeCode="332" VersionNumber="14.00.00" MarketTimestamp="2026-10-01T09:55:35.891Z" SenderID="DSO" RecipientID="S22" TxRefNbr="0000000790000332" />
+  <MIM332_NonIntervalTechnicalMeterDetails MPRN="10900000332" NetworksReferenceNumber="019000000332" LoadProfileCode="01" DUOS_Group="DG1" MeterConfigurationCode="MCC01" MeterPointStatusCode="E" EffectiveFromDate="2026-09-25">
+    <UsageFactors TimeslotCode="24H" EffectiveFromDate="2026-09-25" EstimatedUsageFactor="5033.03824582" />
+    <UsageFactors TimeslotCode="24H" EffectiveFromDate="2026-07-30" ActualUsageFactor="4276.94863062" />
+    <RemovedMeterRegisters MeterCategoryCode="RM106" SerialNumber="90003321">
+      <RegisterLevelInfo TimeslotCode="24H" MeterRegisterSequence="001" UOM_Code="KWH" MeterMultiplier="1" ReadingValue="15968" ReadReasonCode="22" ReadTypeCode="A" PreviousReadDate="2026-07-29" Consumption="600" PostDecimalDetails="0" PreDecimalDetails="07" RegisterTypeCode="01" ReadStatusCode="RREL" />
+    </RemovedMeterRegisters>
+    <NewMeterRegisters MeterCategoryCode="RM107" SerialNumber="90003322" MeterLocationCode="07">
+      <RegisterLevelInfo TimeslotCode="24H" MeterRegisterSequence="001" UOM_Code="KWH" MeterMultiplier="1" ReadingValue="0" ReadReasonCode="21" ReadTypeCode="A" PostDecimalDetails="0" PreDecimalDetails="07" RegisterTypeCode="01" />
+    </NewMeterRegisters>
+  </MIM332_NonIntervalTechnicalMeterDetails>
+</ieXMLDocument>

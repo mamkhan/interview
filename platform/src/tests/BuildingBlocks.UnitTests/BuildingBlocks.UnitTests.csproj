@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AwesomeAssertions"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="xunit.runner.visualstudio"/>
+        <PackageReference Include="xunit.v3"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <!-- The unit tier: the building blocks whose behaviour needs no store, which is why the container
+         fixtures are absent rather than merely unused. ServiceDefaults carries PlatformExceptionHandler
+         and, through its framework reference, the ASP.NET Core types the ProblemDetails test reads. -->
+    <ItemGroup>
+        <ProjectReference Include="..\..\building-blocks\Persistence\BuildingBlocks.Persistence.csproj"/>
+        <ProjectReference Include="..\..\building-blocks\Seedwork\BuildingBlocks.Seedwork.csproj"/>
+        <ProjectReference Include="..\..\building-blocks\ServiceDefaults\ServiceDefaults.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Scripts\*.sql"/>
+    </ItemGroup>
+
+</Project>

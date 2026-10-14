@@ -1,0 +1,21 @@
+# The legacy V1 platform's reader (not in this repository), a Windows service on an on-premises machine.
+# One Arc-enabled machine serves every environment for now; each environment installs its own service on it.
+display_name: The V1 reader
+arc_machine: legacy-host-01
+arc_resource_group: rg-legacy-dev
+packages_account: packages
+packages_container: onprem
+key_vault: shared
+key_vault_secret_names:
+  - ConnectionStrings--v1
+service_bus: shared
+app_insights: shared
+action_group: ops
+runs_metric_name: v1reader.runs
+scheduled_jobs:
+  - meter-facts
+# The consumption ledger the reading-history job writes. The machine may write it only while an environment's load
+# runs, through Metering's storage-containers unit.
+ledger_account:
+  domain: metering-consumption
+  instance: ledger

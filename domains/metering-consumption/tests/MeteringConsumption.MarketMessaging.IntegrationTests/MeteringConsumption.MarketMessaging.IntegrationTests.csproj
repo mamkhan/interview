@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+        <RootNamespace>MeteringConsumption.MarketMessaging.IntegrationTests</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AwesomeAssertions"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="xunit.runner.visualstudio"/>
+        <PackageReference Include="xunit.v3"/>
+        <PackageReference Include="Azure.Messaging.ServiceBus"/>
+        <PackageReference Include="Azure.Storage.Blobs"/>
+        <PackageReference Include="Dapper"/>
+        <PackageReference Include="Microsoft.Data.SqlClient"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+        <Using Include="MeteringConsumption.TestsShared"/>
+    </ItemGroup>
+
+    <!-- The container tier: every class takes its own SuiteScope on the stack BuildingBlocks.TestsShared
+         starts, so the unit tier next door can hold no reference to it and cannot reach a container.
+         ServiceDefaults carries TryAddTimeProvider, which the feature tests call on the host they boot. -->
+    <ItemGroup>
+        <ProjectReference Include="..\MeteringConsumption.TestsShared\MeteringConsumption.TestsShared.csproj"/>
+        <ProjectReference Include="..\..\src\Modules\MarketMessaging\MeteringConsumption.MarketMessaging.csproj"/>
+        <ProjectReference Include="..\..\src\LocalGraph\MeteringConsumption.LocalGraph\MeteringConsumption.LocalGraph.csproj"/>
+        <ProjectReference Include="..\..\..\..\platform\src\building-blocks\TestsShared\BuildingBlocks.TestsShared.csproj"/>
+        <ProjectReference Include="..\..\..\..\platform\src\building-blocks\ServiceDefaults\ServiceDefaults.csproj"/>
+    </ItemGroup>
+
+</Project>

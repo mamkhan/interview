@@ -1,0 +1,18 @@
+# Pinned IaC toolchain (ADR-006 rule 8). Versions move here and nowhere else.
+parameters:
+  - name: terraformVersion
+    type: string
+    default: 1.16.1
+  - name: terragruntVersion
+    type: string
+    default: 1.1.4
+
+steps:
+  - script: |
+      set -e
+      curl -fsSLo /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${{ parameters.terraformVersion }}/terraform_${{ parameters.terraformVersion }}_linux_amd64.zip"
+      sudo unzip -o -q /tmp/terraform.zip -d /usr/local/bin
+      curl -fsSLo /tmp/terragrunt "https://github.com/gruntwork-io/terragrunt/releases/download/v${{ parameters.terragruntVersion }}/terragrunt_linux_amd64"
+      chmod +x /tmp/terragrunt && sudo mv /tmp/terragrunt /usr/local/bin/terragrunt
+      terraform -version && terragrunt --version
+    displayName: Install Terraform and Terragrunt (pinned)

@@ -1,0 +1,5 @@
+# The V1 reader publishes here from the on-premises machine, and the acceptance suite publishes as the reader does;
+# env.hcl names who may, per environment. Metering & Consumption owns its subscription.
+requires_duplicate_detection: false
+accepts_test_senders: true
+accepts_onprem_senders: true

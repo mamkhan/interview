@@ -1,0 +1,4 @@
+# SupplyPoints' Store, named for the event alone while it is the topic's only reader. Session-enabled because Store
+# reads and then writes a supply point's rows, and its ordering key is the MPRN.
+topic: metr.meter-configuration-change-received
+requires_session: true

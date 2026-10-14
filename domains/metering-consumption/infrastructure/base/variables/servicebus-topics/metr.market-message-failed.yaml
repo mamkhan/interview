@@ -1,0 +1,2 @@
+# A processing failure is a business outcome, not a dead letter, so it has a topic of its own.
+requires_duplicate_detection: false

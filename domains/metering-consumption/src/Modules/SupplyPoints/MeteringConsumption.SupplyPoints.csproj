@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>MeteringConsumption.SupplyPoints</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Infrastructure\Schema\Scripts\*.sql" />
+    <None Include="Module.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Contracts\MeteringConsumption.Contracts\MeteringConsumption.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\..\platform\src\Contracts\Platform.Contracts\Platform.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\..\..\platform\src\building-blocks\Messaging\BuildingBlocks.Messaging.csproj" />
+    <ProjectReference Include="..\..\..\..\..\platform\src\building-blocks\Persistence\BuildingBlocks.Persistence.csproj" />
+    <ProjectReference Include="..\..\..\..\..\platform\src\building-blocks\Seedwork\BuildingBlocks.Seedwork.csproj" />
+    <ProjectReference Include="..\..\..\..\..\platform\src\building-blocks\Sql\BuildingBlocks.Sql.csproj" />
+    <ProjectReference Include="..\..\..\..\..\platform\src\building-blocks\Commands\BuildingBlocks.Commands.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Domain\UsageFactor.cs">
+      <DependentUpon>SupplyPoint.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Domain\MeterPoint.cs">
+      <DependentUpon>SupplyPoint.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>

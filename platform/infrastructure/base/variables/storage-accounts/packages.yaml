@@ -1,0 +1,6 @@
+# The builds the on-premises workers download. The pipeline uploads with its own principal and a machine downloads
+# with its Arc identity, so no key or SAS ever exists. A package is rebuilt from source, so locally redundant storage
+# is enough in every environment.
+replication: LRS
+hierarchical_namespace: false
+entra_only: true

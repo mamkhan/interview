@@ -1,0 +1,149 @@
+# The domain, and what it is built and deployed from outside it: the building blocks, the contracts it consumes,
+# the rules and templates its stages run, the shared Terragrunt files its units include, and the build baseline.
+# A shared change is tested and deployed with the domain.
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    include:
+      - domains/metering-consumption
+      - domains/growth/src/Contracts
+      - platform/src/Contracts
+      - platform/src/building-blocks
+      - platform/src/LocalGraph
+      - platform/src/architecture-tests
+      - platform/pipelines/templates
+      - platform/infrastructure/_modules
+      - platform/infrastructure/root.hcl
+      - platform/infrastructure/resources.hcl
+      - platform/infrastructure/common.hcl
+      - global.json
+      - Directory.Build.props
+      - Directory.Packages.props
+      - BannedSymbols.txt
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  # A domain-owned connection replaces the rail's when one exists.
+  - name: azureServiceConnection
+    value: meteringrail-azure
+  - name: imageRepository
+    value: metering-consumption/market-messaging
+  - name: receiverImageRepository
+    value: metering-consumption/market-messaging-receiver
+  - name: migratorProject
+    value: domains/metering-consumption/src/Hosts/MeteringConsumption.Migrator
+  - name: grantScript
+    value: domains/metering-consumption/infrastructure/sql/grant-app-user.sql
+  - name: acceptanceProject
+    value: domains/metering-consumption/tests/MeteringConsumption.AcceptanceTests
+
+stages:
+  - stage: Test
+    displayName: Build and test
+    jobs:
+      - template: /platform/pipelines/templates/test-jobs.yml
+        parameters:
+          solution: domains/metering-consumption/MeteringConsumption.slnx
+          testRoot: domains/metering-consumption/tests
+
+  - stage: DeployDev
+    displayName: Deploy to dev (plan and apply)
+    dependsOn: Test
+    condition: |
+      and(succeeded(),
+          eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    jobs:
+      - template: /platform/pipelines/templates/domain-deploy-jobs.yml
+        parameters:
+          environment: dev
+          azureServiceConnection: $(azureServiceConnection)
+          deploymentEnvironment: acme-dev-metering-consumption
+          unitsPath: domains/metering-consumption/infrastructure/units
+          resourceGroup: acmdevmetrrgmain
+          containerRegistry: acmdevplatcrshared
+          containerApp: acmdevmetrcamarketmsg
+          receiverContainerApp: acmdevmetrcareceiver
+          imageRepository: $(imageRepository)
+          receiverImageRepository: $(receiverImageRepository)
+          sqlServerFqdn: acmdevmetrsqlmain.database.windows.net
+          databaseName: metering-consumption
+          additionalDatabases: [reference-data]
+          identityName: acmdevmetridmarketmsg
+          migratorProject: $(migratorProject)
+          grantScript: $(grantScript)
+
+  - stage: AcceptanceDev
+    displayName: Acceptance (dev)
+    dependsOn: DeployDev
+    condition: succeeded()
+    jobs:
+      - job: Acceptance
+        displayName: Operator file round trip
+        timeoutInMinutes: 10
+        variables:
+          environmentCode: dev
+        steps:
+          - task: UseDotNet@2
+            displayName: Install .NET SDK (global.json)
+            inputs:
+              useGlobalJson: true
+
+          # Inside the CLI task so DefaultAzureCredential and the SQL connection both resolve to the
+          # pipeline principal; a plain script step has no logged-in identity to fall back on.
+          - task: AzureCLI@2
+            displayName: Run the acceptance suite against dev
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                set -e
+                az extension add --name containerapp --upgrade -y >/dev/null 2>&1
+                # The suite composes the store names from the environment code; only the host addresses
+                # are passed, one variable per service code, as the Container App names spell them.
+                prefix="acm$(environmentCode)metr"
+                for service in marketmsg receiver; do
+                  fqdn=$(az containerapp show -n "${prefix}ca${service}" -g "${prefix}rgmain" \
+                    --query properties.configuration.ingress.fqdn -o tsv)
+                  export "ACCEPTANCE_METR_${service^^}_URL=https://${fqdn}"
+                done
+                export ACCEPTANCE_ENVIRONMENT=$(environmentCode)
+                dotnet test $(acceptanceProject) -c Release --logger trx \
+                  --results-directory "$(Agent.TempDirectory)/results"
+
+          - task: PublishTestResults@2
+            displayName: Publish results
+            condition: always()
+            inputs:
+              testResultsFormat: VSTest
+              testResultsFiles: '$(Agent.TempDirectory)/results/*.trx'
+              testRunTitle: Acceptance (dev)
+
+  # - stage: DeployPrd
+  #   displayName: Deploy to production (plan and apply)
+  #   dependsOn: AcceptanceDev
+  #   condition: succeeded()
+  #   jobs:
+  #     - template: /platform/pipelines/templates/domain-deploy-jobs.yml
+  #       parameters:
+  #         environment: prd
+  #         azureServiceConnection: $(azureServiceConnection)
+  #         deploymentEnvironment: acme-prd-metering-consumption
+  #         unitsPath: domains/metering-consumption/infrastructure/units
+  #         resourceGroup: acmprdmetrrgmain
+  #         containerRegistry: acmprdplatcrshared
+  #         containerApp: acmprdmetrcamarketmsg
+  #         receiverContainerApp: acmprdmetrcareceiver
+  #         imageRepository: $(imageRepository)
+  #         receiverImageRepository: $(receiverImageRepository)
+  #         sqlServerFqdn: acmprdmetrsqlmain.database.windows.net
+  #         databaseName: metering-consumption
+  #         additionalDatabases: [reference-data]
+  #         identityName: acmprdmetridmarketmsg
+  #         migratorProject: $(migratorProject)
+  #         grantScript: $(grantScript)
+  #         sourceRegistry: acmdevplatcrshared

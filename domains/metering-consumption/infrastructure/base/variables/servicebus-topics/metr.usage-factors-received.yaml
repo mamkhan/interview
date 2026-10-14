@@ -1,0 +1,3 @@
+# The acceptance suite publishes Profile's input events here; env.hcl names who may, per environment.
+requires_duplicate_detection: false
+accepts_test_senders: true

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Dapper"/>
+        <PackageReference Include="dbup-core"/>
+        <PackageReference Include="dbup-sqlserver"/>
+        <PackageReference Include="Microsoft.Data.SqlClient"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Scripts\*.sql"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Messaging\BuildingBlocks.Messaging.csproj"/>
+        <ProjectReference Include="..\Outbox\BuildingBlocks.Outbox.csproj"/>
+        <ProjectReference Include="..\Seedwork\BuildingBlocks.Seedwork.csproj"/>
+        <ProjectReference Include="..\Sql\BuildingBlocks.Sql.csproj"/>
+    </ItemGroup>
+
+</Project>

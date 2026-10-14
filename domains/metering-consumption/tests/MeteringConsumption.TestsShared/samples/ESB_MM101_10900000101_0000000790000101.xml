@@ -1,0 +1,12 @@
+<ieXMLDocument>
+  <MessageHeader MessageTypeCode="101" VersionNumber="14.00.00" MarketTimestamp="2026-10-01T13:35:49.375Z" SenderID="DSO" RecipientID="S22" TxRefNbr="0000000790000101" />
+  <MIM101_NewConnectionRegistrationAcceptance MPRN="10900000101" MPBusinessReference="010_S22_M3_2026100100000000101" MeterPointStatusCode="E" SupplierMPID="S22" SupplierUnitID="SU_400147" SSAC="A" SettlementClassCode="N" ConnectionSystemCode="DSO_GRID" DUOS_Group="DG1" MaximumImportCapacity="12" MeterConfigurationCode="MCC02" DLF_Code="LV" COT_LE_Flag="1" ReadFrequencyCode="B" ReadCycle="07" RegistrationReceiptDate="2026-10-01" LoadProfileCode="02" EffectiveFromDate="2026-10-01" CommsTechnicallyFeasible="04">
+    <MeterPointAddress AddrLine1="1 TEST COURT" HouseNo="1" Street="MAIN STREET" City="DUBLIN 2" CountyIreland="DB" Country="IE" />
+    <CustomerName LastName="Tester" FirstName="Test" />
+    <CustomerContactDetails>
+      <PhoneOne Number="0850000000" />
+      <PhoneTwo Number="0850000000" />
+    </CustomerContactDetails>
+    <TechnicalContact />
+  </MIM101_NewConnectionRegistrationAcceptance>
+</ieXMLDocument>

@@ -1,0 +1,3 @@
+# The outcome recorded against the receipt row the arrival already has.
+topic: metr.market-message-processed
+requires_session: false

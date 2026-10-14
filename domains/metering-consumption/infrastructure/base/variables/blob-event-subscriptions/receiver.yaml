@@ -1,0 +1,5 @@
+# Announces each blob written to the drop container on the receiver's queue.
+service: market-messaging-receiver
+account: archive
+container: esb-drop
+queue: metr.receive-blob-created

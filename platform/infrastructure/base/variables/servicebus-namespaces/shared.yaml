@@ -1,0 +1,4 @@
+# Topics need Standard or above; Basic is queues-only.
+sku: Standard
+capacity: 0
+log_analytics_workspace: shared

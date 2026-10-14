@@ -1,0 +1,16 @@
+# The same configuration keys the AppHost injects locally. The Drop__ keys name the one operator this app serves; a
+# second operator is a second app, not a second setting.
+identity: receiver
+service: market-messaging-receiver
+cpu: 0.25
+memory: 0.5Gi
+min_replicas: 1
+max_replicas: 2
+settings:
+  ConnectionStrings__messaging: { from: service_bus.fqdn }
+  ConnectionStrings__blobs: { from: storage_accounts.archive.blob_endpoint }
+  APPLICATIONINSIGHTS_CONNECTION_STRING: { from: monitoring.app_insights_connection_string }
+  AZURE_CLIENT_ID: { from: managed_identities.receiver.client_id }
+  Drop__Container: esb-drop
+  Drop__Market: roi-esb
+  Drop__Fuel: electricity

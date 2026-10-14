@@ -1,0 +1,15 @@
+bin/
+obj/
+*.user
+.vs/
+.idea/
+.DS_Store
+.ai-scratch/
+aspire-output/
+*.tfstate*
+.terragrunt-cache/
+.terraform/
+.terraform.lock.hcl
+# playwright-cli session artefacts
+.playwright-cli/
+__pycache__/

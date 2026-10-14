@@ -1,0 +1,5 @@
+P:System.DateTime.UtcNow;A module reads the clock through TimeProvider
+P:System.DateTime.Now;A module reads the clock through TimeProvider
+P:System.DateTimeOffset.UtcNow;A module reads the clock through TimeProvider
+P:System.DateTimeOffset.Now;A module reads the clock through TimeProvider
+M:System.Guid.NewGuid;An identity that must survive a retry is derived from its inputs

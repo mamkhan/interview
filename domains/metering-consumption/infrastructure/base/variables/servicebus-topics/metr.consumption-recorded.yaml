@@ -1,0 +1,4 @@
+# Record publishes each kept version with the ledger entry id as message id and announces a version it finds
+# already kept again under that id, so duplicate detection discards the repeat. Forecast reads it through its own
+# subscription.
+requires_duplicate_detection: true

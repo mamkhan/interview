@@ -1,0 +1,5 @@
+# The market reference data Forecast reads: another process writes it, the host only reads it. Its schema comes from
+# the domain's migrator like the main database's.
+server: main
+sku: Basic
+max_size_gb: 2

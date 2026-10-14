@@ -1,0 +1,4 @@
+# Where the platform's and the domains' alerts go. Production needs a real operations distribution list before its
+# first apply.
+short_name: acme-ops
+email: platform-ops@example.com

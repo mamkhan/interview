@@ -1,0 +1,18 @@
+# The same configuration keys the AppHost injects locally, fed from other resources' outputs. All access is Entra ID
+# through the user-assigned identity (AZURE_CLIENT_ID steers DefaultAzureCredential); no key or password appears
+# anywhere. The bus consumers and the outbox relay run inside the host process, so scale-to-zero would stop
+# consumption: every environment keeps a warm replica.
+identity: marketmsg
+service: metering-consumption-host
+cpu: 0.5
+memory: 1Gi
+min_replicas: 1
+max_replicas: 2
+settings:
+  ConnectionStrings__messaging: { from: service_bus.fqdn }
+  ConnectionStrings__blobs: { from: storage_accounts.archive.blob_endpoint }
+  ConnectionStrings__ledger: { from: storage_accounts.ledger.blob_endpoint }
+  ConnectionStrings__metering-consumption: { from: sql_databases.metering-consumption.connection_string }
+  ConnectionStrings__reference-data: { from: sql_databases.reference-data.connection_string }
+  APPLICATIONINSIGHTS_CONNECTION_STRING: { from: monitoring.app_insights_connection_string }
+  AZURE_CLIENT_ID: { from: managed_identities.marketmsg.client_id }

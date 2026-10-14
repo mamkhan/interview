@@ -1,0 +1,4 @@
+# No write-once policy: a redelivery overwrites an entry with its own bytes, which an immutable container refuses.
+# The ledger is append-only by key instead, one file per supply point, read date and version.
+account: ledger
+retention_days: 0

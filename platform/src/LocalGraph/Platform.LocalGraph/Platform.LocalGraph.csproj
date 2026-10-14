@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Using Include="Aspire.Hosting"/>
+        <Using Include="Aspire.Hosting.ApplicationModel"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Hosting"/>
+        <PackageReference Include="Aspire.Hosting.Azure.ServiceBus"/>
+        <PackageReference Include="Aspire.Hosting.Azure.Sql"/>
+        <PackageReference Include="Aspire.Hosting.Azure.Storage"/>
+        <PackageReference Include="Aspire.Hosting.SqlServer"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Contracts\Platform.Contracts\Platform.Contracts.csproj"/>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,3 @@
+# ADLS Gen2 (hierarchical namespace) for the Parquet ledgers.
+replication: LRS
+hierarchical_namespace: true

@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Apart from MeteringConsumption.Contracts, so only the ledger's writers and readers carry Parquet. -->
+  <PropertyGroup>
+    <RootNamespace>MeteringConsumption.Contracts.Ledger</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Parquet.Net" />
+  </ItemGroup>
+
+</Project>

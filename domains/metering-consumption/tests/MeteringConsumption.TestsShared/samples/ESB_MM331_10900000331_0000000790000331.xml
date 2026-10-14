@@ -1,0 +1,9 @@
+<ieXMLDocument>
+  <MessageHeader MessageTypeCode="331" VersionNumber="14.00.00" MarketTimestamp="2026-09-17T14:11:42.057Z" SenderID="DSO" RecipientID="S22" TxRefNbr="0000000790000331" />
+  <MIM331_IntervalMeterTechnicalDetails MPRN="10900000331" MPBusinessReference="010_20260915125042690_010_000331" DUOS_Group="DG1" MeterPointStatusCode="E" EffectiveFromDate="2026-09-16" MeterConfigurationCode="MCC12" DUoSBillingFrequencyCode="B" DuosBillingCycle="04">
+    <NewMeterRegisters MeterCategoryCode="RM106" SerialNumber="90003311" MeterLocationCode="07" ExchangedMeterReference="000000000090003311">
+      <RegisterChannelInformation MeteringInterval="30" RegisterTypeCode="70" UOM_Code="KWT" />
+      <RegisterChannelInformation MeteringInterval="24" RegisterTypeCode="74" UOM_Code="KWH" />
+    </NewMeterRegisters>
+  </MIM331_IntervalMeterTechnicalDetails>
+</ieXMLDocument>

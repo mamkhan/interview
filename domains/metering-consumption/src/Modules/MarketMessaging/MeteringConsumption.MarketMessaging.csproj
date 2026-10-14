@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <RootNamespace>MeteringConsumption.MarketMessaging</RootNamespace>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Azure.Storage.Blobs" />
+        <PackageReference Include="Dapper" />
+        <PackageReference Include="Microsoft.Data.SqlClient" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
+        <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\Contracts\MeteringConsumption.Contracts\MeteringConsumption.Contracts.csproj" />
+        <ProjectReference Include="..\..\..\..\..\platform\src\building-blocks\Messaging\BuildingBlocks.Messaging.csproj" />
+        <ProjectReference Include="..\..\..\..\..\platform\src\building-blocks\Persistence\BuildingBlocks.Persistence.csproj" />
+        <ProjectReference Include="..\..\..\..\..\platform\src\building-blocks\Seedwork\BuildingBlocks.Seedwork.csproj" />
+        <ProjectReference Include="..\..\..\..\..\platform\src\building-blocks\Sql\BuildingBlocks.Sql.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Infrastructure\Schema\Scripts\*.sql" />
+        <None Include="Module.md" />
+    </ItemGroup>
+
+</Project>

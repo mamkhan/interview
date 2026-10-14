@@ -1,0 +1,7 @@
+# Immutable evidence: the containers carry write-once policies, and sealed market messages tier down rather
+# than expire. The acceptance suite drops its operator file here as the pipeline's principal; env.hcl names who
+# may, per environment.
+replication: LRS
+hierarchical_namespace: false
+tier_container: market-message-archive
+accepts_test_writers: true

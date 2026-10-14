@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AwesomeAssertions"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+        <PackageReference Include="xunit.runner.visualstudio"/>
+        <PackageReference Include="xunit.v3"/>
+        <PackageReference Include="Azure.Messaging.ServiceBus"/>
+        <PackageReference Include="Dapper"/>
+        <PackageReference Include="FluentValidation"/>
+        <PackageReference Include="Microsoft.Data.SqlClient"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Scripts\*.sql"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Using Include="Xunit"/>
+    </ItemGroup>
+
+    <!-- The container tier: the building blocks against real stores, every class on its own SuiteScope,
+         so the unit tier next door can hold no reference to the fixtures and cannot reach a container. -->
+    <ItemGroup>
+        <ProjectReference Include="..\..\building-blocks\Commands\BuildingBlocks.Commands.csproj"/>
+        <ProjectReference Include="..\..\building-blocks\Messaging\BuildingBlocks.Messaging.csproj"/>
+        <ProjectReference Include="..\..\building-blocks\Outbox\BuildingBlocks.Outbox.csproj"/>
+        <ProjectReference Include="..\..\building-blocks\Persistence\BuildingBlocks.Persistence.csproj"/>
+        <ProjectReference Include="..\..\building-blocks\Seedwork\BuildingBlocks.Seedwork.csproj"/>
+        <ProjectReference Include="..\..\building-blocks\ServiceDefaults\ServiceDefaults.csproj"/>
+        <ProjectReference Include="..\..\building-blocks\Sql\BuildingBlocks.Sql.csproj"/>
+        <ProjectReference Include="..\..\building-blocks\TestsShared\BuildingBlocks.TestsShared.csproj"/>
+    </ItemGroup>
+
+</Project>

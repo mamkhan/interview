@@ -1,0 +1,281 @@
+parameters:
+  - name: environment
+    type: string
+  - name: azureServiceConnection
+    type: string
+  - name: deploymentEnvironment
+    type: string
+  - name: resourceGroup
+    type: string
+  - name: containerRegistry
+    type: string
+  - name: containerApp
+    type: string
+  - name: receiverContainerApp
+    type: string
+  - name: imageRepository
+    type: string
+  - name: receiverImageRepository
+    type: string
+  - name: sqlServerFqdn
+    type: string
+  - name: databaseName
+    type: string
+  - name: identityName
+    type: string
+  # The domain's per-type units, one per resource type, each serving the environment named above.
+  - name: unitsPath
+    type: string
+  - name: migratorProject
+    type: string
+  - name: grantScript
+    type: string
+  # Databases on the same server beside databaseName that a module of the domain keeps for itself: each is
+  # migrated and granted the same way.
+  - name: additionalDatabases
+    type: object
+    default: []
+  # Empty builds the images in this stage; a registry name imports them from there instead.
+  - name: sourceRegistry
+    type: string
+    default: ''
+
+jobs:
+  - job: Infrastructure
+    displayName: Terragrunt plan, apply and drift check
+    timeoutInMinutes: 45
+    steps:
+      - template: iac-steps.yml
+
+      - task: AzureCLI@2
+        displayName: Plan the domain stack
+        inputs:
+          azureSubscription: ${{ parameters.azureServiceConnection }}
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            set -e
+            export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+            export TG_NON_INTERACTIVE=true
+            export ACME_ENVIRONMENT=${{ parameters.environment }}
+            cd ${{ parameters.unitsPath }}
+            terragrunt run --all plan -- -lock-timeout=120s
+
+      - task: AzureCLI@2
+        displayName: Apply the domain stack
+        inputs:
+          azureSubscription: ${{ parameters.azureServiceConnection }}
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            set -e
+            export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+            export TG_NON_INTERACTIVE=true
+            export ACME_ENVIRONMENT=${{ parameters.environment }}
+            cd ${{ parameters.unitsPath }}
+            terragrunt run --all apply
+
+      - task: AzureCLI@2
+        displayName: Drift check (plan must be clean)
+        inputs:
+          azureSubscription: ${{ parameters.azureServiceConnection }}
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            set -e
+            export ARM_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+            export TG_NON_INTERACTIVE=true
+            export ACME_ENVIRONMENT=${{ parameters.environment }}
+            cd ${{ parameters.unitsPath }}
+            PLAN_OUTPUT=$(terragrunt run --all plan 2>&1)
+            if echo "$PLAN_OUTPUT" | grep -E "Plan: [0-9]+ to add|to change|to destroy" | grep -vq "Plan: 0 to add, 0 to change, 0 to destroy"; then
+              echo "##[error]Domain stack has drift after apply:"
+              echo "$PLAN_OUTPUT"
+              exit 1
+            fi
+            echo "No drift."
+
+  - job: DatabaseMigrations
+    displayName: Schema and app user
+    dependsOn: Infrastructure
+    timeoutInMinutes: 20
+    steps:
+      - task: UseDotNet@2
+        displayName: Install .NET SDK (global.json)
+        inputs:
+          useGlobalJson: true
+
+      # The migrator reads the connection string from the key the hosts read, so it arrives as an
+      # environment variable rather than on a command line the logs would carry.
+      - task: AzureCLI@2
+        displayName: Apply the schema as the deployer principal
+        env:
+          ConnectionStrings__${{ parameters.databaseName }}: "Server=tcp:${{ parameters.sqlServerFqdn }},1433;Initial Catalog=${{ parameters.databaseName }};Authentication=Active Directory Default;Encrypt=True;"
+          ${{ each database in parameters.additionalDatabases }}:
+            ConnectionStrings__${{ database }}: "Server=tcp:${{ parameters.sqlServerFqdn }},1433;Initial Catalog=${{ database }};Authentication=Active Directory Default;Encrypt=True;"
+        inputs:
+          azureSubscription: ${{ parameters.azureServiceConnection }}
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            set -e
+            dotnet run --project ${{ parameters.migratorProject }} -c Release
+
+      - task: AzureCLI@2
+        displayName: Grant the host identity its database user
+        inputs:
+          azureSubscription: ${{ parameters.azureServiceConnection }}
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            set -e
+            curl -fsSLo /tmp/sqlcmd.tar.bz2 "https://github.com/microsoft/go-sqlcmd/releases/download/v1.8.0/sqlcmd-linux-amd64.tar.bz2"
+            tar -xjf /tmp/sqlcmd.tar.bz2 -C /tmp sqlcmd
+            CLIENT_ID=$(az identity show -n "${{ parameters.identityName }}" -g "${{ parameters.resourceGroup }}" --query clientId -o tsv)
+            SID=$(python3 -c "import uuid,sys; print('0x' + uuid.UUID(sys.argv[1]).bytes_le.hex().upper())" "$CLIENT_ID")
+            /tmp/sqlcmd --authentication-method ActiveDirectoryDefault \
+              -S "${{ parameters.sqlServerFqdn }}" -d "${{ parameters.databaseName }}" \
+              -i ${{ parameters.grantScript }} \
+              -v IdentityName="${{ parameters.identityName }}" -v IdentitySid="$SID"
+
+      - ${{ each database in parameters.additionalDatabases }}:
+        - task: AzureCLI@2
+          displayName: Grant the host identity its user in ${{ database }}
+          inputs:
+            azureSubscription: ${{ parameters.azureServiceConnection }}
+            scriptType: bash
+            scriptLocation: inlineScript
+            inlineScript: |
+              set -e
+              CLIENT_ID=$(az identity show -n "${{ parameters.identityName }}" -g "${{ parameters.resourceGroup }}" --query clientId -o tsv)
+              SID=$(python3 -c "import uuid,sys; print('0x' + uuid.UUID(sys.argv[1]).bytes_le.hex().upper())" "$CLIENT_ID")
+              /tmp/sqlcmd --authentication-method ActiveDirectoryDefault \
+                -S "${{ parameters.sqlServerFqdn }}" -d "${{ database }}" \
+                -i ${{ parameters.grantScript }} \
+                -v IdentityName="${{ parameters.identityName }}" -v IdentitySid="$SID"
+
+  - deployment: BuildAndDeploy
+    displayName: Image, revision update and smoke test
+    dependsOn: DatabaseMigrations
+    timeoutInMinutes: 30
+    # An environment named here must exist in Azure DevOps even when it carries no check: a missing one
+    # fails the whole run at initialization, before any stage executes.
+    environment: ${{ parameters.deploymentEnvironment }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+
+            - ${{ if eq(parameters.sourceRegistry, '') }}:
+                - task: UseDotNet@2
+                  displayName: Install .NET SDK (global.json)
+                  inputs:
+                    useGlobalJson: true
+
+                - script: |
+                    set -e
+                    dotnet publish domains/metering-consumption/src/Hosts/MeteringConsumption.Host \
+                      -c Release /t:PublishContainer \
+                      -p ContainerRepository=${{ parameters.imageRepository }} \
+                      -p ContainerImageTags=$(Build.BuildId)
+                    dotnet publish domains/metering-consumption/src/Hosts/MarketMessaging.Receiver \
+                      -c Release /t:PublishContainer \
+                      -p ContainerRepository=${{ parameters.receiverImageRepository }} \
+                      -p ContainerImageTags=$(Build.BuildId)
+                  displayName: Build both container images
+
+                - task: AzureCLI@2
+                  displayName: Push both images
+                  inputs:
+                    azureSubscription: ${{ parameters.azureServiceConnection }}
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      set -e
+                      az acr login --name "${{ parameters.containerRegistry }}"
+                      for repo in "${{ parameters.imageRepository }}" "${{ parameters.receiverImageRepository }}"; do
+                        docker tag "$repo:$(Build.BuildId)" "${{ parameters.containerRegistry }}.azurecr.io/$repo:$(Build.BuildId)"
+                        docker push "${{ parameters.containerRegistry }}.azurecr.io/$repo:$(Build.BuildId)"
+                      done
+
+            - ${{ if ne(parameters.sourceRegistry, '') }}:
+                - task: AzureCLI@2
+                  displayName: Import the images the acceptance suite passed against
+                  inputs:
+                    azureSubscription: ${{ parameters.azureServiceConnection }}
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      set -e
+                      for repo in "${{ parameters.imageRepository }}" "${{ parameters.receiverImageRepository }}"; do
+                        az acr import --name "${{ parameters.containerRegistry }}" \
+                          --source "${{ parameters.sourceRegistry }}.azurecr.io/$repo:$(Build.BuildId)" \
+                          --image "$repo:$(Build.BuildId)" --force
+                      done
+
+            - task: AzureCLI@2
+              displayName: Move both Container App revisions
+              inputs:
+                azureSubscription: ${{ parameters.azureServiceConnection }}
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  set -e
+                  az extension add --name containerapp --upgrade -y >/dev/null 2>&1
+                  az containerapp update -n "${{ parameters.containerApp }}" -g "${{ parameters.resourceGroup }}" \
+                    --image "${{ parameters.containerRegistry }}.azurecr.io/${{ parameters.imageRepository }}:$(Build.BuildId)" -o none
+                  az containerapp update -n "${{ parameters.receiverContainerApp }}" -g "${{ parameters.resourceGroup }}" \
+                    --image "${{ parameters.containerRegistry }}.azurecr.io/${{ parameters.receiverImageRepository }}:$(Build.BuildId)" -o none
+
+            - task: AzureCLI@2
+              displayName: Verify both new revisions are serving
+              inputs:
+                azureSubscription: ${{ parameters.azureServiceConnection }}
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  set -e
+                  az extension add --name containerapp --upgrade -y >/dev/null 2>&1
+                  for app in "${{ parameters.containerApp }}" "${{ parameters.receiverContainerApp }}"; do
+                    DEADLINE=$(( $(date +%s) + 600 ))
+                    while :; do
+                      ROWS=$(az containerapp revision list -n "$app" -g "${{ parameters.resourceGroup }}" \
+                        --query '[?properties.active].{name:name,running:properties.runningState,prov:properties.provisioningState,traffic:properties.trafficWeight,created:properties.createdTime}' -o json)
+                      echo "$app: $ROWS"
+                      VERDICT=$(echo "$ROWS" | python3 -c '
+                  import json, sys
+                  rows = json.load(sys.stdin)
+                  if not rows:
+                      print("pending"); raise SystemExit
+                  if any(r["running"] in ("Failed", "Degraded", "ActivationFailed") or r["prov"] == "Failed" for r in rows):
+                      print("failed"); raise SystemExit
+                  if len(rows) > 1 or any(r["prov"] not in ("Provisioned", "Succeeded") for r in rows):
+                      print("pending"); raise SystemExit
+                  print("ok")')
+                      case "$VERDICT" in
+                        ok) echo "$app: newest revision is serving."; break ;;
+                        failed) echo "##[error]$app: revision failed to start."; exit 1 ;;
+                      esac
+                      if [ "$(date +%s)" -gt "$DEADLINE" ]; then
+                        echo "##[error]$app: revision did not settle within 10 minutes."; exit 1
+                      fi
+                      sleep 15
+                    done
+                  done
+
+            - task: AzureCLI@2
+              displayName: Smoke test both hosts
+              inputs:
+                azureSubscription: ${{ parameters.azureServiceConnection }}
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  set -e
+                  az extension add --name containerapp --upgrade -y >/dev/null 2>&1
+                  for app in "${{ parameters.containerApp }}" "${{ parameters.receiverContainerApp }}"; do
+                    FQDN=$(az containerapp show -n "$app" -g "${{ parameters.resourceGroup }}" \
+                      --query properties.configuration.ingress.fqdn -o tsv)
+                    curl -fsS "https://$FQDN/health"
+                    echo "$app answers its health check on the new revision."
+                  done

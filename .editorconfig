@@ -1,0 +1,26 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml,props,csproj,slnx}]
+indent_size = 2
+
+[*.cs]
+csharp_style_namespace_declarations = file_scoped:warning
+
+# A slice's reaction to an event is named <Feature><Event>EventHandler; this repository declares no event delegates.
+dotnet_code_quality.CA1711.allowed_suffixes = EventHandler
+
+# LoggerMessage source generation is adopted when a measured hot log path appears, not by default.
+dotnet_diagnostic.CA1848.severity = none
+dotnet_diagnostic.CA1873.severity = none
+
+# EF Core migration files are generated; style rules do not apply to them.
+[**/Migrations/*.cs]
+generated_code = true
+dotnet_diagnostic.IDE0161.severity = none

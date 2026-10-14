@@ -1,0 +1,3 @@
+# Growth publishes the topic and its pipeline creates it; this domain owns only its subscription.
+topic: grow.tariff-resolved
+requires_session: true

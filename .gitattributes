@@ -1,0 +1,7 @@
+# Keep shell scripts LF so Git Bash on Windows can run them.
+*.sh text eol=lf
+
+# Test samples are content-addressed fixtures: the archive path and the reading id are derived from a
+# hash of these bytes, so an EOL conversion on checkout changes what the pipeline computes and the
+# expected hashes only hold on the platform the sample was committed from.
+**/tests/**/samples/** -text

@@ -1,0 +1,13 @@
+<ieXMLDocument>
+  <MessageHeader MessageTypeCode="105" VersionNumber="14.00.00" MarketTimestamp="2026-10-02T12:14:52.753Z" SenderID="DSO" RecipientID="S22" TxRefNbr="0000000790000105" />
+  <MIM105_ChangeofSupplierConfirmation MPRN="10900000105" MPBusinessReference="010_20260930000000000_010_000105" MeterPointStatusCode="E" SupplierMPID="S22" SupplierUnitID="SU_400400" SSAC="A" SettlementClassCode="P" ConnectionSystemCode="DSO_GRID" DUOS_Group="DG2" MaximumImportCapacity="12" MeterConfigurationCode="MCC12" DLF_Code="LV" EffectiveFromDate="2026-10-01" DUoSBillingFrequencyCode="B" DuosBillingCycle="38" CommsTechnicallyFeasible="04">
+    <MeterPointAddress Street="MAIN STREET" City="TESTTOWN" CountyIreland="DL" Country="IE" />
+    <CustomerName Title="Mr" LastName="Tester" FirstName="Test" />
+    <CustomerContactDetails Email="test@example.invalid">
+      <PhoneOne Number="085 0000000" />
+      <PhoneTwo Number="085 0000000" />
+    </CustomerContactDetails>
+    <TechnicalContact />
+    <MIM105_SmartDataServices SmartDataServicesCode="01" RegistrationMeterConfigurationCode="MCC12" EstimatedAnnualConsumption="2453" />
+  </MIM105_ChangeofSupplierConfirmation>
+</ieXMLDocument>

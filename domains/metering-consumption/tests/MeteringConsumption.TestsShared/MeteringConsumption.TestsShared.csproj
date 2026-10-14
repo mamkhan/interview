@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <!-- The real ESB files, held once here and copied into every referencing test project's output. -->
+    <ItemGroup>
+        <None Include="samples\**" CopyToOutputDirectory="PreserveNewest"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Modules\Consumption\MeteringConsumption.Consumption.csproj"/>
+        <ProjectReference Include="..\..\src\Modules\SupplyPoints\MeteringConsumption.SupplyPoints.csproj"/>
+    </ItemGroup>
+
+</Project>

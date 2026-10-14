@@ -1,0 +1,10 @@
+<ieXMLDocument>
+  <MessageHeader MessageTypeCode="300S" VersionNumber="14.00.00" MarketTimestamp="2026-09-29T13:37:47.653Z" SenderID="DSO" RecipientID="S22" TxRefNbr="0000000790000301" />
+  <MIM300S_ValidatedNonIntervalReadingsSpecial MPRN="10900000301" NetworksReferenceNumber="019000000301" LoadProfileCode="01" DUOS_Group="DG1" MeterPointStatusCode="E" ReadDate="2026-09-28">
+    <UsageFactors TimeslotCode="24H" EffectiveFromDate="2026-09-29" EstimatedUsageFactor="1847.49762189" />
+    <UsageFactors TimeslotCode="24H" EffectiveFromDate="2026-09-12" ActualUsageFactor="464.15887798" />
+    <MeterID MeterCategoryCode="RM006" SerialNumber="90003011">
+      <RegisterLevelInfo MeterRegisterSequence="001" TimeslotCode="24H" UOM_Code="KWH" MeterMultiplier="1" ReadingValue="77186" ReadReasonCode="09" ReadTypeCode="A" PreviousReadDate="2026-09-11" Consumption="20" ReadStatusCode="RV" RegisterTypeCode="01" />
+    </MeterID>
+  </MIM300S_ValidatedNonIntervalReadingsSpecial>
+</ieXMLDocument>

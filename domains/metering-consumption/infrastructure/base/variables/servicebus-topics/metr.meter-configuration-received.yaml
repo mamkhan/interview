@@ -1,0 +1,5 @@
+# The acceptance suite publishes Profile's input events here; env.hcl names who may, per environment. The V1
+# reader publishes V1's smart meter flag here from the on-premises machine.
+requires_duplicate_detection: false
+accepts_test_senders: true
+accepts_onprem_senders: true

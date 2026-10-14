@@ -1,0 +1,3 @@
+# SQL provisioning is restricted in North Europe on this subscription, so the server sits in France Central
+# while everything else here does not. Retires when a quota exception is granted.
+location: francecentral

@@ -1,0 +1,4 @@
+# Session-enabled because Forecast handles one supply point's recorded readings one at a time, in order, and its
+# ordering key is the supply point.
+topic: metr.consumption-recorded
+requires_session: true

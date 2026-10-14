@@ -1,0 +1,4 @@
+# Growth publishes nothing itself yet: the V1 reader publishes this event from the on-premises machine until a
+# Pricing service exists. Consumers own their subscriptions.
+requires_duplicate_detection: false
+accepts_onprem_senders: true

@@ -1,0 +1,4 @@
+cpu: 1.0
+memory: 2Gi
+min_replicas: 2
+max_replicas: 10

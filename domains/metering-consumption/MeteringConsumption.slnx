@@ -1,0 +1,187 @@
+<Solution>
+  <Folder Name="/platform/">
+    <Project Path="../../platform/src/Contracts/Platform.Contracts/Platform.Contracts.csproj" />
+    <Project Path="../../platform/src/LocalGraph/LocalBlobEvents/LocalBlobEvents.csproj" />
+    <Project Path="../../platform/src/LocalGraph/Platform.LocalGraph/Platform.LocalGraph.csproj" />
+  </Folder>
+  <Folder Name="/platform/building-blocks/">
+    <Project Path="../../platform/src/building-blocks/Commands/BuildingBlocks.Commands.csproj" />
+    <Project Path="../../platform/src/building-blocks/Messaging/BuildingBlocks.Messaging.csproj" />
+    <Project Path="../../platform/src/building-blocks/Outbox/BuildingBlocks.Outbox.csproj" />
+    <Project Path="../../platform/src/building-blocks/Persistence/BuildingBlocks.Persistence.csproj" />
+    <Project Path="../../platform/src/building-blocks/Seedwork/BuildingBlocks.Seedwork.csproj" />
+    <Project Path="../../platform/src/building-blocks/ServiceDefaults/ServiceDefaults.csproj" />
+    <Project Path="../../platform/src/building-blocks/Sql/BuildingBlocks.Sql.csproj" />
+    <Project Path="../../platform/src/building-blocks/TestsShared/BuildingBlocks.TestsShared.csproj" />
+  </Folder>
+  <Folder Name="/platform/tests/">
+    <Project Path="../../platform/src/tests/BuildingBlocks.IntegrationTests/BuildingBlocks.IntegrationTests.csproj" />
+    <Project Path="../../platform/src/tests/BuildingBlocks.UnitTests/BuildingBlocks.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/contracts/">
+    <Project Path="src/Contracts/MeteringConsumption.Contracts/MeteringConsumption.Contracts.csproj" />
+    <Project Path="src/Contracts/MeteringConsumption.Contracts.Ledger/MeteringConsumption.Contracts.Ledger.csproj" />
+  </Folder>
+  <Folder Name="/hosts/">
+    <Project Path="src/Hosts/MarketMessaging.Receiver/MarketMessaging.Receiver.csproj" />
+    <Project Path="src/Hosts/MeteringConsumption.Host/MeteringConsumption.Host.csproj" />
+    <Project Path="src/Hosts/MeteringConsumption.Migrator/MeteringConsumption.Migrator.csproj" />
+  </Folder>
+  <Folder Name="/Modules/">
+    <Project Path="src/Modules/Consumption/MeteringConsumption.Consumption.csproj" />
+    <Project Path="src/Modules/MarketMessaging/MeteringConsumption.MarketMessaging.csproj" />
+    <Project Path="src/Modules/SupplyPoints/MeteringConsumption.SupplyPoints.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MeteringConsumption.AcceptanceTests/MeteringConsumption.AcceptanceTests.csproj" />
+    <Project Path="tests/MeteringConsumption.Consumption.IntegrationTests/MeteringConsumption.Consumption.IntegrationTests.csproj" />
+    <Project Path="tests/MeteringConsumption.Consumption.UnitTests/MeteringConsumption.Consumption.UnitTests.csproj" />
+    <Project Path="tests/MeteringConsumption.MarketMessaging.IntegrationTests/MeteringConsumption.MarketMessaging.IntegrationTests.csproj" />
+    <Project Path="tests/MeteringConsumption.MarketMessaging.UnitTests/MeteringConsumption.MarketMessaging.UnitTests.csproj" />
+    <Project Path="tests/MeteringConsumption.SupplyPoints.IntegrationTests/MeteringConsumption.SupplyPoints.IntegrationTests.csproj" />
+    <Project Path="tests/MeteringConsumption.SupplyPoints.UnitTests/MeteringConsumption.SupplyPoints.UnitTests.csproj" />
+    <Project Path="tests/MeteringConsumption.TestsShared/MeteringConsumption.TestsShared.csproj" />
+  </Folder>
+  <Folder Name="/infrastructure/">
+    <File Path="infrastructure/layer.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/base/" />
+  <Folder Name="/infrastructure/base/variables/" />
+  <Folder Name="/infrastructure/base/variables/blob-event-subscriptions/">
+    <File Path="infrastructure/base/variables/blob-event-subscriptions/receiver.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/container-apps/">
+    <File Path="infrastructure/base/variables/container-apps/marketmsg.yaml" />
+    <File Path="infrastructure/base/variables/container-apps/receiver.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/managed-identities/">
+    <File Path="infrastructure/base/variables/managed-identities/marketmsg.yaml" />
+    <File Path="infrastructure/base/variables/managed-identities/receiver.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/monitors/">
+    <File Path="infrastructure/base/variables/monitors/dlq.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/resource-groups/">
+    <File Path="infrastructure/base/variables/resource-groups/main.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/servicebus-queues/">
+    <File Path="infrastructure/base/variables/servicebus-queues/metr.receive-blob-created.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/servicebus-subscriptions/">
+    <File Path="infrastructure/base/variables/servicebus-subscriptions/metr.audit-market-message-failed.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-subscriptions/metr.audit-market-message-processed.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-subscriptions/metr.audit-market-message-received.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-subscriptions/metr.interpret-market-message-received.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-subscriptions/metr.meter-configuration-change-received.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-subscriptions/metr.profile-meter-configuration-received.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-subscriptions/metr.profile-tariff-resolved.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-subscriptions/metr.profile-usage-factors-received.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-subscriptions/metr.record-interval-reading-received.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-subscriptions/metr.supply-point-loaded-from-v1.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/servicebus-topics/">
+    <File Path="infrastructure/base/variables/servicebus-topics/metr.consumption-recorded.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-topics/metr.interval-reading-received.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-topics/metr.market-message-failed.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-topics/metr.market-message-processed.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-topics/metr.market-message-received.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-topics/metr.meter-configuration-change-received.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-topics/metr.meter-configuration-received.yaml" />
+    <File Path="infrastructure/base/variables/servicebus-topics/metr.usage-factors-received.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/sql-databases/">
+    <File Path="infrastructure/base/variables/sql-databases/metering-consumption.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/sql-servers/">
+    <File Path="infrastructure/base/variables/sql-servers/main.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/storage-accounts/">
+    <File Path="infrastructure/base/variables/storage-accounts/archive.yaml" />
+    <File Path="infrastructure/base/variables/storage-accounts/ledger.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/base/variables/storage-containers/">
+    <File Path="infrastructure/base/variables/storage-containers/consumption-ledger.yaml" />
+    <File Path="infrastructure/base/variables/storage-containers/esb-drop.yaml" />
+    <File Path="infrastructure/base/variables/storage-containers/market-message-archive.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/dev/">
+    <File Path="infrastructure/dev/env.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/dev/variables/" />
+  <Folder Name="/infrastructure/dev/variables/sql-servers/">
+    <File Path="infrastructure/dev/variables/sql-servers/main.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/prd/">
+    <File Path="infrastructure/prd/env.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/prd/variables/" />
+  <Folder Name="/infrastructure/prd/variables/container-apps/">
+    <File Path="infrastructure/prd/variables/container-apps/marketmsg.yaml" />
+    <File Path="infrastructure/prd/variables/container-apps/receiver.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/prd/variables/sql-databases/">
+    <File Path="infrastructure/prd/variables/sql-databases/metering-consumption.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/prd/variables/storage-accounts/">
+    <File Path="infrastructure/prd/variables/storage-accounts/archive.yaml" />
+    <File Path="infrastructure/prd/variables/storage-accounts/ledger.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/prd/variables/storage-containers/">
+    <File Path="infrastructure/prd/variables/storage-containers/market-message-archive.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/sql/">
+    <File Path="infrastructure/sql/grant-app-user.sql" />
+  </Folder>
+  <Folder Name="/infrastructure/tst/">
+    <File Path="infrastructure/tst/env.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/tst/variables/" />
+  <Folder Name="/infrastructure/tst/variables/sql-databases/">
+    <File Path="infrastructure/tst/variables/sql-databases/metering-consumption.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/tst/variables/storage-containers/">
+    <File Path="infrastructure/tst/variables/storage-containers/market-message-archive.yaml" />
+  </Folder>
+  <Folder Name="/infrastructure/units/" />
+  <Folder Name="/infrastructure/units/blob-event-subscriptions/">
+    <File Path="infrastructure/units/blob-event-subscriptions/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/container-apps/">
+    <File Path="infrastructure/units/container-apps/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/managed-identities/">
+    <File Path="infrastructure/units/managed-identities/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/monitors/">
+    <File Path="infrastructure/units/monitors/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/resource-groups/">
+    <File Path="infrastructure/units/resource-groups/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/servicebus-queues/">
+    <File Path="infrastructure/units/servicebus-queues/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/servicebus-subscriptions/">
+    <File Path="infrastructure/units/servicebus-subscriptions/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/servicebus-topics/">
+    <File Path="infrastructure/units/servicebus-topics/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/sql-databases/">
+    <File Path="infrastructure/units/sql-databases/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/sql-servers/">
+    <File Path="infrastructure/units/sql-servers/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/storage-accounts/">
+    <File Path="infrastructure/units/storage-accounts/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/infrastructure/units/storage-containers/">
+    <File Path="infrastructure/units/storage-containers/terragrunt.hcl" />
+  </Folder>
+  <Folder Name="/pipelines/">
+    <File Path="pipelines/metering-consumption.yml" />
+  </Folder>
+  <Project Path="src/AppHost/MeteringConsumption.AppHost.csproj" />
+  <Project Path="src/LocalGraph/MeteringConsumption.LocalGraph/MeteringConsumption.LocalGraph.csproj" />
+</Solution>

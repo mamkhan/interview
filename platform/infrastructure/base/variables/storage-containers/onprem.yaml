@@ -1,0 +1,4 @@
+# One folder per worker and environment; the pipeline principal uploads each build here.
+account: packages
+retention_days: 0
+accepts_uploads: true

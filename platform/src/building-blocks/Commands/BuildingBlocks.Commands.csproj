@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="FluentValidation"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Persistence\BuildingBlocks.Persistence.csproj"/>
+        <ProjectReference Include="..\Seedwork\BuildingBlocks.Seedwork.csproj"/>
+    </ItemGroup>
+
+</Project>
